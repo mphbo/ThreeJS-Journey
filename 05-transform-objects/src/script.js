@@ -11,7 +11,7 @@ const scene = new THREE.Scene();
 /**
  * Objects
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1);
+const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
@@ -26,8 +26,21 @@ const sizes = {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
-camera.position.z = 3;
+const aspectRatio = sizes.width / sizes.height;
+const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100);
+// const camera = new THREE.OrthographicCamera(
+//   -1 * aspectRatio,
+//   1 * aspectRatio,
+//   1,
+//   -1,
+//   0.1,
+//   100
+// );
+camera.position.x = 2;
+camera.position.y = 2;
+camera.position.z = 2;
+console.log(camera);
+camera.lookAt(mesh.position);
 scene.add(camera);
 
 /**
@@ -39,25 +52,12 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 
 // Clock
-// const clock = new THREE.Clock();
-
-gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
-gsap.to(mesh.position, { duration: 1, delay: 2, x: 0 });
+const clock = new THREE.Clock();
 
 // Animation
 const gameLoop = () => {
-  // const elapsedTime = clock.getElapsedTime();
-
-  // Update objects
-  // mesh.rotation.x = elapsedTime * Math.PI * 2;
-  // mesh.rotation.z = elapsedTime * Math.PI * 2;
-  // mesh.position.y = Math.sin(elapsedTime);
-  // mesh.position.z = Math.cos(elapsedTime * 2);
-  // mesh.position.x = Math.cos(elapsedTime);
-  // camera.position.x = Math.sin(elapsedTime);
-  // camera.position.y = Math.cos(elapsedTime);
-  // camera.lookAt(mesh.position);
-  // mesh.position.y += 0.01;
+  const elapsedTime = clock.getElapsedTime();
+  mesh.rotation.y = elapsedTime;
 
   // Render
   renderer.render(scene, camera);
