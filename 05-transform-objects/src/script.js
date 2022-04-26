@@ -5,10 +5,14 @@ import gsap from "gsap";
 import * as dat from "lil-gui";
 
 // Debug
-const gui = new dat.GUI();
+const gui = new dat.GUI({ closed: true, width: 400 });
+// gui.hide();
 
 const parameters = {
   color: 0xff0000,
+  spin: () => {
+    gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + 10 });
+  },
 };
 
 // Cursor
@@ -61,6 +65,7 @@ gui.add(material, "wireframe");
 gui.addColor(parameters, "color").onChange(() => {
   material.color.set(parameters.color);
 });
+gui.add(parameters, "spin");
 // gui.add(mesh.position, "y", -3, 3, 0.01);
 // gui.add(mesh.position, "z", -3, 3, 0.01);
 
@@ -94,6 +99,13 @@ window.addEventListener("dblclick", () => {
     } else if (document.webkitFullscreen) {
       document.webkitExitFullscreen();
     }
+  }
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "h") {
+    if (gui._hidden) gui.show();
+    else gui.hide();
   }
 });
 /**
