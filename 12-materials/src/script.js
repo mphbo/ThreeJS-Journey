@@ -54,6 +54,7 @@ const material = new THREE.MeshStandardMaterial();
 material.metalness = 0.45;
 material.roughness = 0.65;
 material.map = doorColorTexture;
+material.aoMap = doorAmbientTexture;
 
 // material.shininess = 100;
 // material.specular = new THREE.Color(0x1188ff);
@@ -68,7 +69,17 @@ const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), material);
 // const material = new THREE.MeshBasicMaterial();
 sphere.position.x = -1.5;
 
+sphere.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2)
+);
+
 const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+
+plane.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2)
+);
 
 const torus = new THREE.Mesh(
   new THREE.TorusGeometry(0.3, 0.2, 16, 32),
@@ -76,6 +87,11 @@ const torus = new THREE.Mesh(
 );
 
 torus.position.x = 1.5;
+
+torus.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2)
+);
 
 scene.add(sphere, plane, torus);
 
