@@ -9,6 +9,7 @@ const gui = new dat.GUI();
 
 // Textures
 const textureLoader = new THREE.TextureLoader();
+const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 const doorColorTexture = textureLoader.load("/textures/door/color.jpg");
 const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
@@ -24,6 +25,15 @@ const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
 gradientTexture.minFilter = THREE.NearestFilter;
 gradientTexture.magFilter = THREE.NearestFilter;
 gradientTexture.generateMipmaps = false;
+
+const environmentMapTexture = cubeTextureLoader.load([
+  "/textures/environmentMaps/4/px.png",
+  "/textures/environmentMaps/4/nx.png",
+  "/textures/environmentMaps/4/py.png",
+  "/textures/environmentMaps/4/ny.png",
+  "/textures/environmentMaps/4/pz.png",
+  "/textures/environmentMaps/4/nz.png",
+]);
 
 /**
  * Base
@@ -51,10 +61,19 @@ const scene = new THREE.Scene();
 // const material = new THREE.MeshToonMaterial();
 // material.gradientMap = gradientTexture;
 const material = new THREE.MeshStandardMaterial();
-material.metalness = 0.45;
-material.roughness = 0.65;
-material.map = doorColorTexture;
-material.aoMap = doorAmbientTexture;
+material.metalness = 1;
+material.roughness = 0;
+material.envMap = environmentMapTexture;
+// material.map = doorColorTexture;
+// material.aoMap = doorAmbientTexture;
+// material.aoMapIntensity = 1;
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.05;
+// material.metalnessMap = doorMetalnessTexture;
+// material.roughnessMap = doorRoughnessTexture;
+// material.normalMap = doorNormalTexture;
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
 
 // material.shininess = 100;
 // material.specular = new THREE.Color(0x1188ff);
@@ -64,17 +83,19 @@ material.aoMap = doorAmbientTexture;
 
 gui.add(material, "metalness").min(0).max(1).step(0.0001);
 gui.add(material, "roughness").min(0).max(1).step(0.0001);
+gui.add(material, "aoMapIntensity").min(0).max(10).step(0.0001);
+gui.add(material, "displacementScale").min(0).max(1).step(0.0001);
 
-const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), material);
+const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 64, 64), material);
 // const material = new THREE.MeshBasicMaterial();
-sphere.position.x = -1.5;
+// sphere.position.x = -1.5;
 
 sphere.geometry.setAttribute(
   "uv2",
   new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2)
 );
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 100, 100), material);
 
 plane.geometry.setAttribute(
   "uv2",
@@ -82,18 +103,18 @@ plane.geometry.setAttribute(
 );
 
 const torus = new THREE.Mesh(
-  new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+  new THREE.TorusGeometry(0.3, 0.2, 64, 128),
   material
 );
 
-torus.position.x = 1.5;
+// torus.position.x = 1.5;
 
 torus.geometry.setAttribute(
   "uv2",
   new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2)
 );
 
-scene.add(sphere, plane, torus);
+scene.add(torus);
 
 // Lights
 
@@ -164,13 +185,20 @@ const clock = new THREE.Clock();
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
-  sphere.rotation.y = 0.5 * elapsedTime;
-  plane.rotation.y = 0.5 * elapsedTime;
-  torus.rotation.y = 0.5 * elapsedTime;
+  sphere.rotation.y = 0.1 * elapsedTime;
+  // plane.rotation.y = 0.1 * elapsedTime;
+  // torus.rotation.y = 0.1 * elapsedTime;
 
-  sphere.rotation.x = 0.85 * elapsedTime;
-  plane.rotation.x = 0.85 * elapsedTime;
-  torus.rotation.x = 0.85 * elapsedTime;
+  // sphere.rotation.x = 0.2 * elapsedTime;
+  // plane.rotation.x = 0.2 * elapsedTime;
+  torus.rotation.x = 0.8 * elapsedTime;
+  // camera.lookAt(1 * elapsedTime);
+  // camera.rotation.y = (90 * Math.PI) / 180;
+  // camera.position.y = Math.sin(0.5 * elapsedTime);
+  // camera.position.y = Math.sin(8.5 * elapsedTime);
+  // camera.position.z = Math.sin(8.5 * elapsedTime);
+  // camera.position.y = 1.5 * elapsedTime;
+  // camera.position.z = 1.5 * elapsedTime;
 
   // Update controls
   controls.update();
