@@ -25,13 +25,13 @@ const scene = new THREE.Scene();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
-const matcapTexture = textureLoader.load("/textures/matcaps/3.png");
+const matcapTexture = textureLoader.load("/textures/matcaps/7.png");
 
 // Fonts
 const fontLoader = new FontLoader();
 
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-  const textGeometry = new TextGeometry("Three.js", {
+  const textGeometry = new TextGeometry("Radioactive Donuts", {
     font,
     size: 0.5,
     height: 0.2,
@@ -56,13 +56,13 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
   scene.add(text);
 
   console.time("donuts");
-  const donutGeometry = new THREE.SphereGeometry(0.5, 64, 64);
-  for (let i = 0; i < 100; i++) {
+  const donutGeometry = new THREE.TorusBufferGeometry(0.3, 0.2, 20, 45);
+  for (let i = 0; i < 4000; i++) {
     const donut = new THREE.Mesh(donutGeometry, material);
 
-    donut.position.x = (Math.random() - 0.5) * 10;
-    donut.position.y = (Math.random() - 0.5) * 10;
-    donut.position.z = (Math.random() - 0.5) * 10;
+    donut.position.x = (Math.random() - 0.5) * 30;
+    donut.position.y = (Math.random() - 0.5) * 30;
+    donut.position.z = (Math.random() - 0.5) * 30;
 
     donut.rotation.x = Math.random() * Math.PI;
     donut.rotation.y = Math.random() * Math.PI;
@@ -113,7 +113,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.x = 1;
 camera.position.y = 1;
-camera.position.z = 2;
+camera.position.z = 4;
 scene.add(camera);
 
 // Controls
@@ -140,7 +140,7 @@ const tick = () => {
   // Update controls
   controls.update();
   // camera.rotation.x += 1;
-  camera.position.x = Math.sin(0.25 * elapsedTime) * 4;
+  // camera.position.x = Math.sin(0.25 * elapsedTime) * 4;
 
   // Render
   renderer.render(scene, camera);
